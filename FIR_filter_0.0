@@ -1,0 +1,12 @@
+% Filter specifications
+Fs = 100000; % Sampling frequency (Hz)
+passband = [20000 40000]; % Passband frequency range (Hz)
+transitionWidth = 1000; % Transition width (Hz)
+stopband = [passband(1)-transitionWidth/2 passband(2)+transitionWidth/2]; % Stopband frequency range (Hz)
+attenuation = -30; % Stopband attenuation (dB)
+% Design the FIR filter using the fir1 function with Kaiser window
+filterOrder = round(6.6*(Fs/transitionWidth)); % Rule of thumb for FIR filter order
+cutoffFreq = [passband(1)-transitionWidth/2 passband(2)+transitionWidth/2]/(Fs/2);
+filterCoeff = fir1(filterOrder, cutoffFreq, 'bandpass', kaiser(filterOrder+1, attenuation));
+% Plot the frequency response of the filter
+fvtool(filterCoeff, 1, 'Fs', Fs);
